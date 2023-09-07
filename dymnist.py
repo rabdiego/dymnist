@@ -19,7 +19,7 @@ def draw(canvas : np.ndarray, pos : np.ndarray, erase=False):
 
 pg.init()
 
-SIDE_LENGHT = 560
+SIDE_LENGHT = 700
 PIXEL_SIZE = SIDE_LENGHT/28
 display = pg.display.set_mode((SIDE_LENGHT, SIDE_LENGHT))
 clock = pg.time.Clock()
@@ -47,7 +47,7 @@ model.load_weights('models/cp.ckpt')
 
 text = font.render(f'Hi', True, (255,255,255))
 text_rect = text.get_rect()
-text_rect.center = (500, 100)  
+text_rect.center = (int(0.9*SIDE_LENGHT), int(0.1*SIDE_LENGHT))  
 
 running = True
 while running:
@@ -64,11 +64,11 @@ while running:
     is_mouse_being_pressed = pg.mouse.get_pressed()
     if is_mouse_being_pressed[0]:
         pos = np.array(pg.mouse.get_pos())
-        pos = pos//20
+        pos = pos//(int(SIDE_LENGHT/28))
         draw(canvas, pos)
     elif is_mouse_being_pressed[2]:
         pos = np.array(pg.mouse.get_pos())
-        pos = pos//20
+        pos = pos//(int(SIDE_LENGHT/28))
         draw(canvas, pos, erase=True)
 
     for i in range(28):
