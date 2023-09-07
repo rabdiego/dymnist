@@ -2,6 +2,21 @@ import pygame as pg
 import numpy as np
 import tensorflow as tf
 
+def draw(canvas : np.ndarray, pos : np.ndarray, erase=False):
+    values = [
+        [0.25, 0.5, 0.25],
+        [0.5, 1, 0.5],
+        [0.25, 0.5, 0.25]
+    ]
+    
+    for i in range(-1, 2):
+        for j in range(-1, 2):
+            if 0 <= pos[1] + i <= 27 and 0 <= pos[0] + j <= 27:
+                if not erase and canvas[pos[1]+i][pos[0]+j] < values[i+1][j+1]:
+                    canvas[pos[1]+i][pos[0]+j] = values[i+1][j+1]
+                elif erase:
+                    canvas[pos[1]+i][pos[0]+j] = 0
+
 pg.init()
 
 SIDE_LENGHT = 560
@@ -50,18 +65,17 @@ while running:
     if is_mouse_being_pressed[0]:
         pos = np.array(pg.mouse.get_pos())
         pos = pos//20
-        canvas[pos[1], pos[0]] = 1
+        draw(canvas, pos)
     elif is_mouse_being_pressed[2]:
         pos = np.array(pg.mouse.get_pos())
         pos = pos//20
-        canvas[pos[1], pos[0]] = 0
-    
+        draw(canvas, pos, erase=True)
+
     for i in range(28):
         for j in range(28):
-            pg.draw.rect(display, [canvas[i][j]*255 for _ in range(3)], rects[i][j])
+            pg.draw.rect(display, [int(canvas[i][j]*255) for _ in range(3)], rects[i][j])
     
     
     display.blit(text, text_rect)
     
     pg.display.update()
-    clock.tick(60)
